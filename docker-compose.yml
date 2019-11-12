@@ -1,0 +1,26 @@
+version: "3"
+services:
+  database:
+    image: "mysql:5.7"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass1234
+      - MYSQL_DATABASE=psb_backend
+  app:
+    build: .
+    working_dir: /app
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./:/app
+    ports:
+      - "8082:8082"
+    command: "npm run dev"
+    depends_on:
+      - database
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
